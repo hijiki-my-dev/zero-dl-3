@@ -1,3 +1,5 @@
+import numpy as np
+
 from step01 import Variable
 
 class Function:
@@ -11,7 +13,7 @@ class Function:
         raise NotImplementedError()
 
 class Square(Function):
-    def forward(self, x):
+    def forward(self, x: np.ndarray):
         return x**2
 
 if __name__ == "__main__":
