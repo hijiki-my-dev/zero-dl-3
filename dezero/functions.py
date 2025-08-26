@@ -47,6 +47,20 @@ def tanh(x):
     return Tanh()(x)
 
 
+class Exp(Function):
+    def forward(self, x):
+        y = np.exp(x)
+        return y
+
+    def backward(self, gy):
+        y = self.outputs[0]()
+        gx = gy * y
+        return gx
+
+def exp(x):
+    return Exp()(x)
+
+
 class Reshape(Function):
     def __init__(self, shape: tuple):
         self.shape = shape
@@ -148,3 +162,23 @@ class MatMul(Function):
 
 def matmul(x, W):
     return MatMul()(x, W)
+
+
+def linear_simple(x, W, b=None):
+    x, W = as_variable(x), as_variable(W)
+    t = matmul(x, W)
+    if b is None:
+        return t
+
+    y = t + b
+    t.data = None # tのデータを消去
+    return y
+
+def sigmoid_simple(x):
+    x = as_variable(x)
+    y = 1 / (1 + exp(-x))
+    return y
+
+def mean_squared_error(x0, x1):
+    diff = x0 - x1
+    return sum(diff**2) / len(diff)
